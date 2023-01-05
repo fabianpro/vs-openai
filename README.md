@@ -1,7 +1,7 @@
 # VS-OpenAI
 
-![demo](https://github.com/fabianpro/vs-openai/blob/main/src/assets/videos/settings.gif?raw=true)
-![demo](https://github.com/fabianpro/vs-openai/blob/main/src/assets/videos/code.gif?raw=true)
+![demo](https://github.com/fabianpro/vs-openai/blob/main/assets/videos/settings.gif?raw=true)
+![demo](https://github.com/fabianpro/vs-openai/blob/main/assets/videos/code.gif?raw=true)
 
 ## Features
 
