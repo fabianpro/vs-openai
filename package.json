@@ -2,13 +2,13 @@
   "name": "vs-openai",
   "displayName": "vs-openai",
   "description": "Extension useful to combine openai with vs code editor and take advantage of IA to develop",
-  "icon": "assets/images/logo.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/fabianpro/vs-openai"
   },
   "version": "1.0.0",
   "author": "Fabian Huerfano",
+  "publisher": "FabianHuerfano",
   "engines": {
     "vscode": "^1.74.0"
   },
