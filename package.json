@@ -6,7 +6,8 @@
     "type": "git",
     "url": "https://github.com/fabianpro/vs-openai"
   },
-  "version": "1.0.0",
+  "icon": "assets/images/icon.png",
+  "version": "1.0.1",
   "author": "Fabian Huerfano",
   "publisher": "FabianHuerfano",
   "engines": {
