@@ -1,29 +1,196 @@
 {
   "name": "vs-openai",
   "displayName": "vs-openai",
-  "description": "Extension useful to combine openai with vs code editor",
-  "version": "0.0.1",
+  "description": "Extension useful to combine openai with vs code editor and take advantage of IA to develop",
+  "icon": "assets/images/logo.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fabianpro/vs-openai"
+  },
+  "version": "1.0.0",
+  "author": "Fabian Huerfano",
   "engines": {
     "vscode": "^1.74.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    "onCommand:vs-openai.helloWorld"
-  ],
+  "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "vs-openai.configure",
-        "title": "OpenAI Configure"
-      },
+    "configuration": {
+      "title": "VS OpenAI",
+      "properties": {
+        "vs-openai.apiKey": {
+          "type": "string",
+          "default": null,
+          "order": 1,
+          "markdownDescription": "Set here your API key created in [OpenAI](https://beta.openai.com/)."
+        },
+        "vs-openai.model": {
+          "type": "string",
+          "default": "text-davinci-003",
+          "order": 2,
+          "enum": [
+            "text-davinci-003",
+            "text-curie-001",
+            "text-babbage-001",
+            "text-ada-001",
+            "code-davinci-002",
+            "code-cushman-001"
+          ],
+          "enumDescriptions": [
+            "GPT-3 - Most capable model in the GPT-3 series. Can perform any task the other GPT-3 models can, often with higher quality, longer output and better instruction-following. It can process up to 4,000 tokens per request. \n\nSTRENGTHS\n Complex intent, cause and effect, creative generation, search, summarization for audience.",
+            "GPT-3 - Very capable, but faster and lower cost than text-davinci-003. \n\nSTRENGTHS\n Language translation, complex, classification, sentiment, summarization.",
+            "GPT-3 - Capable of straightforward tasks, very fast, and lower cost. \n\nSTRENGTHS\n Moderate classification, semantic search.",
+            "GPT-3 - Capable of simple tasks, ussuarlly the fastest model in the GPT-3 series, and lowest cost.\n\nSTRENGTHS\n Parsing text, simple classification, address correction, keywords.",
+            "CODEX - Most capable model in the Codex series, which can understand and generate code, including translating natural language to code, It can process up to 4,000 tokens per request.\n\nOur JavaScript Sandbox demo application uses this model to translate instructions into JS.",
+            "CODEX - Almost as capable as code-davinci-002, but slightly faster. Part of the Codex series, which can understand and generate code.\n\nOur JavaScript Sandbox demo application uses this model to translate instructions into JS.\n\nSTRENGTHS\nReal-time applications where low latency is preferable."
+          ],
+          "markdownDescription": "The model which generate the completion. Some models are suitable for natural language tasks, others specialize in code. [Learn more](https://beta.openai.com/docs/models/)."
+        },
+        "vs-openai.temperature": {
+          "type": "number",
+          "default": 0,
+          "minimum": 0,
+          "maximum": 1, 
+          "order": 3,         
+          "description": "Controls randomness: Lowering results in less random completions. As the temperature approaches zero, the model will become deterministic and repetitive."
+        },
+        "vs-openai.maxTokens": {
+          "type": "number",
+          "default": 256,
+          "minimum": 1,
+          "maximum": 8000, 
+          "order": 4,         
+          "description": "The maximum number of tokens to generate. Request can use up to 2,048 or 4,000 token shared between prompot and completion. The exact limit varies by model. (One token is roughly 4 characters for normal Englush textt)"
+        },
+        "vs-openai.topP": {
+          "type": "number",
+          "default": 1,
+          "minimum": 0,
+          "maximum": 1,   
+          "order": 5,       
+          "description": "Controls diversity via nucleos sampling: 0.5 means half of all likelihood-weighted options are considered."
+        },
+        "vs-openai.frequencyPenalty": {
+          "type": "number",
+          "default": 0,
+          "minimum": 0,
+          "maximum": 2,   
+          "order": 6,       
+          "description": "How much to penalize new tokens based on their existing frequency in the text so far. Decreases the model´s likelihood to repeat the same line verbatim."
+        },
+        "vs-openai.presencePenalty": {
+          "type": "number",
+          "default": 0,
+          "minimum": 0,
+          "maximum": 2, 
+          "order": 7,         
+          "description": "How much to penalize new tokens based on wheather they appear in the text so far. Increases the model´s likelihood to talk about new topics."
+        },
+        "vs-openai.showResult": {
+          "type": "string",
+          "default": "side",
+          "order": 8,
+          "enum": [
+            "next_to",
+            "side",
+            "inline"
+          ],
+          "enumDescriptions": [
+            "Show result in other tab over the same group.",
+            "Show result on the side in a new group in a new tab.",
+            "Show result inline."
+          ],
+          "description": "Select how do you want to see the result."
+        },
+        "vs-openai.lang": {
+          "type": "string",
+          "default": "EN",
+          "order": 9,
+          "enum": [
+            "EN",
+            "ES"
+          ],
+          "description": "Choose what kind of language would you like the AI respond."
+        }   
+      }
+    },
+    "commands": [     
       {
         "command": "vs-openai.ai",
-        "title": "OpenAI Query"
+        "title": "Do query"
+      },
+      {
+        "command": "vs-openai.explain",
+        "title": "Explain code"
+      },
+      {
+        "command": "vs-openai.problem",
+        "title": "Find problems"
+      },      
+      {
+        "command": "vs-openai.documentation",
+        "title": "Document code"
+      },           
+      {
+        "command": "vs-openai.refactor",
+        "title": "Refactor code"
+      },
+      {
+        "command": "vs-openai.test",
+        "title": "Generate unit test"
+      },      
+      {
+        "command": "vs-openai.transform",
+        "title": "Transform to different programming language"
+      }      
+    ],    
+    "menus": {
+      "editor/context": [        
+        {
+          "when": "editorTextFocus",
+          "submenu": "vsopenai.menu"
+        }
+      ],      
+      "vsopenai.menu": [
+        {
+          "command": "vs-openai.ai",
+          "title": "Do query"
+        },
+        {        
+          "command": "vs-openai.explain",
+          "title": "Explain code"
+        },
+        {
+          "command": "vs-openai.problem",
+          "title": "Find problems"
+        },      
+        {
+          "command": "vs-openai.documentation",
+          "title": "Document code"
+        },           
+        {
+          "command": "vs-openai.refactor",
+          "title": "Refactor code"
+        },
+        {
+          "command": "vs-openai.test",
+          "title": "Generate unit test"
+        },      
+        {
+          "command": "vs-openai.transform",
+          "title": "Transform to different programming language"
+        }   
+      ]
+    },
+    "submenus": [
+      {
+        "id": "vsopenai.menu",
+        "label": "VS OpenAI"
       }
-    ]
+    ]  
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

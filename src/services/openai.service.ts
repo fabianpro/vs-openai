@@ -2,49 +2,60 @@
 import * as vscode from 'vscode';
 import { Configuration, OpenAIApi } from 'openai';
 
-async function executeAI(key: string, text: string): Promise<any> {
+async function executeAI(text: string): Promise<any> {
+    const configuration = vscode.workspace.getConfiguration('vs-openai');
+    const apiKey: string = <string>configuration.get('apiKey');
+    const model: string = <string>configuration.get("model");
+    const temperature: number = <number>configuration.get("temperature");
+    const maxTokens: number = <number>configuration.get("maxTokens");
+    const topP: number = <number>configuration.get("topP");
+    const frequencyPenalty: number = <number>configuration.get("frequencyPenalty");
+    const presencePenalty: number = <number>configuration.get("presencePenalty");
+
     return new Promise<any>(async (resolve, reject) => {
+        vscode.window.showInformationMessage('Loading...');        
+
         vscode.window.withProgress({
             location: vscode.ProgressLocation.Window,
             cancellable: false,
-            title: 'Loading response OpenAI Please wait ...'
+            title: 'Loading OpenAI...'
         }, async (progress) => {
-            
-            progress.report({  increment: 0 });
 
-            const configuration = new Configuration({ apiKey: key });
-            const openai = new OpenAIApi(configuration);
-        
+            progress.report({ increment: 0 });
+
+            const confAI = new Configuration({ apiKey: apiKey });
+            const openai = new OpenAIApi(confAI);
+
             try {
                 const completion = await openai.createCompletion({
-                    model: "text-davinci-003",
+                    model: model,
                     prompt: text,
-                    temperature: 0,
-                    max_tokens: 256,
-                    top_p: 1,
-                    frequency_penalty: 0,
-                    presence_penalty: 0,
+                    temperature: temperature,
+                    max_tokens: maxTokens,
+                    top_p: topP,
+                    frequency_penalty: frequencyPenalty,
+                    presence_penalty: presencePenalty,
                     stop: ["\"\"\""],
                 });
-        
-                if (completion.status === 200) {              
+
+                if (completion.status === 200) {
                     resolve(completion.data);
                 } else {
                     reject(completion);
-                }                       
+                }
             } catch (e) {
-                reject(e);                
+                reject(e);
             } finally {
                 await Promise.resolve();
-                progress.report({ increment: 100 });                    
-            }       
+                progress.report({ increment: 100 });
+            }
         });
-    });      
+    });
 }
 
-export async function doQueryAI(key: string, inputBox: string) {
+function createQuery(inputBox: string) {
     return new Promise((resolve, reject) => {
-        executeAI(key, inputBox)
+        executeAI(inputBox)
             .then((result) => {
                 let finishReason: string = '';
                 const str = result?.choices.map((item: any) => {
@@ -54,13 +65,38 @@ export async function doQueryAI(key: string, inputBox: string) {
                 resolve({
                     finishReason: finishReason,
                     data: str
-                });                
+                });
             })
             .catch(e => {
-                vscode.window.showErrorMessage('something was wrong.');
-                vscode.window.activeTerminal?.sendText(JSON.stringify(e), true);
+                vscode.window.showErrorMessage('Something was wrong, please be more specific.');
+                //vscode.window.activeTerminal?.sendText(JSON.stringify(e), true);
                 console.error(JSON.stringify(e));
                 reject(e);
             });
-    });    
+    });
+}
+
+
+export function doCompleteQueryAI(inputBox: string) {
+    return new Promise<string>(async (resolve, reject) => {
+        try {
+            let doRequestAgain: boolean = false;
+            let query = inputBox;
+            const responses: string[] = [];
+
+            do {
+                if (responses.length > 0) {
+                    query += responses[responses.length - 1];
+                }
+
+                const data: any = await createQuery(query!);
+                responses.push(data.data);
+                doRequestAgain = data.finishReason === 'length';
+            } while (doRequestAgain);
+
+            resolve(responses.join(''));
+        } catch (e) {
+            reject(e);
+        }
+    });
 }
