@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { doCompleteQueryAI } from '../services/openai.service';
-import { showResponse } from '../services/util.service';
+import { cleanResponse, showResponse } from '../services/util.service';
 
 export const IA_COMMAND = 'vs-openai.ai';
 
@@ -28,9 +28,5 @@ export async function commandHandlerAI(editor: vscode.TextEditor) {
     }
     
     const data = await doCompleteQueryAI(text!);
-    showResponse(editor, transformResponse(data), 'end');
-}
-
-function transformResponse(data: string) {   
-    return `\n${data}\n`;     
+    showResponse(editor, cleanResponse(data, {spacesStart: 1, spacesEnd: 1}), 'end');
 }
