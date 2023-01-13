@@ -14,6 +14,7 @@ This extension provides a easy way to use features of OpenAI from Visual Studio 
 * Explain code
 * Find problems in code
 * Transform code to other programming language
+* Translate text
 
 ## Configuring extension
 

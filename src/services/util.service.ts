@@ -41,3 +41,9 @@ export function cleanResponse(data: string, {spacesStart, spacesEnd}: {spacesSta
     const end = "\n".repeat(spacesEnd);
     return `${start}${data}${end}`;    
 }
+
+export function getConfiguration(value: string) {
+    const configuration = vscode.workspace.getConfiguration('vs-openai');
+    const conf = configuration.get(value);
+    return conf;
+}

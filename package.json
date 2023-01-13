@@ -7,7 +7,7 @@
     "url": "https://github.com/fabianpro/vs-openai"
   },
   "icon": "assets/images/icon.png",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "author": "Fabian Huerfano",
   "publisher": "FabianHuerfano",
   "engines": {
@@ -56,7 +56,7 @@
           "minimum": 0,
           "maximum": 1, 
           "order": 3,         
-          "description": "Controls randomness: Lowering results in less random completions. As the temperature approaches zero, the model will become deterministic and repetitive."
+          "description": "Controls randomness: Lowering results in less random completions. As the temperature approaches zero, the model will become deterministic and repetitive. (Min: 0, Max: 1)"
         },
         "vs-openai.maxTokens": {
           "type": "number",
@@ -64,7 +64,7 @@
           "minimum": 1,
           "maximum": 8000, 
           "order": 4,         
-          "description": "The maximum number of tokens to generate. Request can use up to 2,048 or 4,000 token shared between prompot and completion. The exact limit varies by model. (One token is roughly 4 characters for normal Englush textt)"
+          "description": "The maximum number of tokens to generate. Request can use up to 2,048 or 4,000 token shared between prompt and completion. The exact limit varies by model. (One token is roughly 4 characters for normal Englush textt)  (Min: 1, Max: 8000)"
         },
         "vs-openai.topP": {
           "type": "number",
@@ -72,7 +72,7 @@
           "minimum": 0,
           "maximum": 1,   
           "order": 5,       
-          "description": "Controls diversity via nucleos sampling: 0.5 means half of all likelihood-weighted options are considered."
+          "description": "Controls diversity via nucleos sampling: 0.5 means half of all likelihood-weighted options are considered.  (Min: 0, Max: 1)"
         },
         "vs-openai.frequencyPenalty": {
           "type": "number",
@@ -80,7 +80,7 @@
           "minimum": 0,
           "maximum": 2,   
           "order": 6,       
-          "description": "How much to penalize new tokens based on their existing frequency in the text so far. Decreases the model´s likelihood to repeat the same line verbatim."
+          "description": "How much to penalize new tokens based on their existing frequency in the text so far. Decreases the model´s likelihood to repeat the same line verbatim.  (Min: 0, Max: 2)"
         },
         "vs-openai.presencePenalty": {
           "type": "number",
@@ -88,7 +88,7 @@
           "minimum": 0,
           "maximum": 2, 
           "order": 7,         
-          "description": "How much to penalize new tokens based on wheather they appear in the text so far. Increases the model´s likelihood to talk about new topics."
+          "description": "How much to penalize new tokens based on wheather they appear in the text so far. Increases the model´s likelihood to talk about new topics.  (Min: 0, Max: 2)"
         },
         "vs-openai.showResult": {
           "type": "string",
@@ -146,6 +146,10 @@
       {
         "command": "vs-openai.transform",
         "title": "Transform to different programming language"
+      },           
+      {
+        "command": "vs-openai.translate",
+        "title": "Translate to"
       }      
     ],    
     "menus": {
@@ -183,7 +187,11 @@
         {
           "command": "vs-openai.transform",
           "title": "Transform to different programming language"
-        }   
+        },           
+        {
+          "command": "vs-openai.translate",
+          "title": "Translate to"
+        } 
       ]
     },
     "submenus": [

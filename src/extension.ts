@@ -9,6 +9,7 @@ import { DOCUMENTATION_COMMAND, commandHandlerDocumentation } from './commands/d
 import { REFACTOR_COMMAND, commandHandlerRefactor } from './commands/refactor.command';
 import { TEST_COMMAND, commandHandlerTest } from './commands/testing.command';
 import { TRANSFORM_COMMAND, commandHandlerTransform } from './commands/transform.command';
+import { TRANSLATE_COMMAND, commandHandlerTranslate } from './commands/translate.command';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -21,6 +22,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.commands.registerTextEditorCommand(REFACTOR_COMMAND, (editor) => commandHandlerRefactor(editor)));	
 	context.subscriptions.push(vscode.commands.registerTextEditorCommand(TEST_COMMAND, (editor) => commandHandlerTest(editor)));		
 	context.subscriptions.push(vscode.commands.registerTextEditorCommand(TRANSFORM_COMMAND, (editor) => commandHandlerTransform(editor)));		
+	context.subscriptions.push(vscode.commands.registerTextEditorCommand(TRANSLATE_COMMAND, (editor) => commandHandlerTranslate(editor)));		
 }
 
 // This method is called when your extension is deactivated
