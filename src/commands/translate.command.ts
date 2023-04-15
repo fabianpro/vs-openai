@@ -17,7 +17,7 @@ export async function commandHandlerTranslate(editor: vscode.TextEditor) {
     const selectedText = editor?.document.getText(editor.selection);
 
     if (!selectedText) {
-        vscode.window.showErrorMessage('Query is mandatory to execute this action, or you can write and select in file what do you want, select and try again');
+        vscode.window.showErrorMessage('Query is mandatory to execute this command, or you could write, select text and try again');
         return;
     }
 

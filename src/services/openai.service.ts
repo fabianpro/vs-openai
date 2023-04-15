@@ -67,8 +67,12 @@ function createQuery(inputBox: string) {
                     data: str
                 });
             })
-            .catch(e => {
-                vscode.window.showErrorMessage('Something was wrong, please be more specific.');
+            .catch(e => {                
+                if (e.response.status === 429) {
+                    vscode.window.showErrorMessage('Rate limit reached for requests.');
+                } else {
+                    vscode.window.showErrorMessage('Something was wrong, please be more specific.');
+                }
                 //vscode.window.activeTerminal?.sendText(JSON.stringify(e), true);
                 console.error(JSON.stringify(e));
                 reject(e);
